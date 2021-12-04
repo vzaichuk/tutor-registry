@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: account-service
+
+server:
+  port: 8082
+
+jwt:
+  key: "0xCODE"

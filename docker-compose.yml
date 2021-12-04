@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  discovery-service:
+    build: discovery
+    image: discovery-image
+    networks:
+      - bus
+  authentication-service:
+    build: authentication
+    image: authentication-image
+    depends_on:
+      - discovery-service
+    networks:
+      - bus
+  account-service:
+    build: account
+    image: account-image
+    depends_on:
+      - discovery-service
+    networks:
+      - bus
+networks:
+  bus:
+    driver: bridge

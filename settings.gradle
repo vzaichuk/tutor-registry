@@ -1,0 +1,8 @@
+rootProject.name = 'tutor-registry'
+
+include 'account'
+include 'authentication'
+include 'discovery'
+include 'gateway'
+include 'notification'
+include 'registration'
