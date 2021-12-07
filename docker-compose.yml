@@ -1,39 +1,56 @@
 version: "3.7"
 services:
-  discovery-service:
-    build: discovery
-    image: discovery-image
+#  discovery-service:
+#    build: discovery
+#    image: discovery-image
+#    networks:
+#      - bus
+#    ports:
+#      - ${DISCOVERY_PORT}:${DISCOVERY_PORT}
+#    env_file: .env
+#  gateway-service:
+#    build: gateway
+#    image: gateway-image
+#    depends_on:
+#      - ${DISCOVERY_HOST}
+#    networks:
+#      - bus
+#    ports:
+#      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+#    env_file: .env
+#  authentication-service:
+#    build: authentication
+#    image: authentication-image
+#    depends_on:
+#      - ${DISCOVERY_HOST}
+#    networks:
+#      - bus
+#    env_file: .env
+#  account-service:
+#    build: account
+#    image: account-image
+#    depends_on:
+#      - ${DISCOVERY_HOST}
+#    networks:
+#      - bus
+#    env_file: .env
+  mysql-service:
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: password
+#      MYSQL_USER: user
+#      MYSQL_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     networks:
       - bus
     ports:
-      - ${DISCOVERY_PORT}:${DISCOVERY_PORT}
-    env_file: .env
-  authentication-service:
-    build: authentication
-    image: authentication-image
-    depends_on:
-      - ${DISCOVERY_HOST}
-    networks:
-      - bus
-    env_file: .env
-  gateway-service:
-    build: gateway
-    image: gateway-image
-    depends_on:
-      - ${DISCOVERY_HOST}
-    networks:
-      - bus
-    ports:
-      - ${GATEWAY_PORT}:${GATEWAY_PORT}
-    env_file: .env
-  account-service:
-    build: account
-    image: account-image
-    depends_on:
-      - ${DISCOVERY_HOST}
-    networks:
-      - bus
-    env_file: .env
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - './docker/mysql/data:/var/lib/mysql'
+      - './docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './docker/mysql/sql:/docker-entrypoint-initdb.d'
 networks:
   bus:
 #    driver: bridge

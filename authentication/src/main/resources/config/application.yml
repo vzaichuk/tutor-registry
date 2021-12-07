@@ -5,6 +5,10 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${AUTHENTICATION_DB_NAME}
+    username: ${AUTHENTICATION_DB_USER}
+    password: ${AUTHENTICATION_DB_PASS}
 
 server:
   port: ${AUTHENTICATION_PORT}
