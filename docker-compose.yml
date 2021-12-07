@@ -16,13 +16,24 @@ services:
     networks:
       - bus
     env_file: .env
-#  account-service:
-#    build: account
-#    image: account-image
-#    depends_on:
-#      - discovery-service
-#    networks:
-#      - bus
+  gateway-service:
+    build: gateway
+    image: gateway-image
+    depends_on:
+      - ${DISCOVERY_HOST}
+    networks:
+      - bus
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    env_file: .env
+  account-service:
+    build: account
+    image: account-image
+    depends_on:
+      - ${DISCOVERY_HOST}
+    networks:
+      - bus
+    env_file: .env
 networks:
   bus:
 #    driver: bridge
