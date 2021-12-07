@@ -1,13 +1,18 @@
 spring:
   application:
-    name: authentication-service
+    name: ${AUTHENTICATION_HOST}
   cloud:
     loadbalancer:
       ribbon:
         enabled: false
 
 server:
-  port: 8081
+  port: ${AUTHENTICATION_PORT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka
 
 jwt:
   key: "0xCODE"

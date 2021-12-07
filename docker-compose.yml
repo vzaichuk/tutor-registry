@@ -5,20 +5,24 @@ services:
     image: discovery-image
     networks:
       - bus
+    ports:
+      - ${DISCOVERY_PORT}:${DISCOVERY_PORT}
+    env_file: .env
   authentication-service:
     build: authentication
     image: authentication-image
     depends_on:
-      - discovery-service
+      - ${DISCOVERY_HOST}
     networks:
       - bus
-  account-service:
-    build: account
-    image: account-image
-    depends_on:
-      - discovery-service
-    networks:
-      - bus
+    env_file: .env
+#  account-service:
+#    build: account
+#    image: account-image
+#    depends_on:
+#      - discovery-service
+#    networks:
+#      - bus
 networks:
   bus:
-    driver: bridge
+#    driver: bridge

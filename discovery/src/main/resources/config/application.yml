@@ -1,6 +1,6 @@
 spring:
   application:
-    name: discovery-service
+    name: ${DISCOVERY_HOST}
   cloud:
     loadbalancer:
       ribbon:
@@ -8,7 +8,7 @@ spring:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${DISCOVERY_HOST}
   client:
     registerWithEureka: false
     fetchRegistry: false
@@ -16,4 +16,4 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 server:
-  port: 8761
+  port: ${DISCOVERY_PORT}
