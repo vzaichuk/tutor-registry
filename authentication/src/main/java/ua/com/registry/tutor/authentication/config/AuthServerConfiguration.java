@@ -19,16 +19,15 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @RequiredArgsConstructor
 public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+  private final AuthenticationManager authenticationManager;
+  private final PasswordEncoder passwordEncoder;
+
   @Value("${jwt.key}")
   private String jwtKey;
 
-  private final AuthenticationManager authenticationManager;
-
-  private final PasswordEncoder passwordEncoder;
-
   @Override
-  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.inMemory()
+  public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
+    configurer.inMemory()
         .withClient("client")
         .secret(passwordEncoder.encode("secret"))
         .authorizedGrantTypes("password", "refresh_token")
@@ -36,8 +35,8 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
   }
 
   @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-    endpoints.authenticationManager(authenticationManager)
+  public void configure(AuthorizationServerEndpointsConfigurer configurer) {
+    configurer.authenticationManager(authenticationManager)
         .tokenStore(tokenStore())
         .accessTokenConverter(jwtAccessTokenConverter());
   }
