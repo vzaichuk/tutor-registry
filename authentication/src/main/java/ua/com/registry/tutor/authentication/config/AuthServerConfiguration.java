@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -13,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import ua.com.registry.tutor.authentication.config.security.CustomClientDetailsService;
+import ua.com.registry.tutor.authentication.service.AuthClientService;
 
 @Configuration
 @EnableAuthorizationServer
@@ -20,18 +21,14 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
   private final AuthenticationManager authenticationManager;
-  private final PasswordEncoder passwordEncoder;
+  private final AuthClientService authClientService;
 
   @Value("${jwt.key}")
   private String jwtKey;
 
   @Override
   public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
-    configurer.inMemory()
-        .withClient("client")
-        .secret(passwordEncoder.encode("secret"))
-        .authorizedGrantTypes("password", "refresh_token")
-        .scopes("read");
+    configurer.withClientDetails(new CustomClientDetailsService(authClientService));
   }
 
   @Override

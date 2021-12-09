@@ -1,5 +1,7 @@
 package ua.com.registry.tutor.authentication.service;
 
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,5 +29,9 @@ public class UserService {
     user.setEnabled(true);
 
     userRepository.save(user);
+  }
+
+  public Optional<User> findByUserName(String username) {
+    return userRepository.findByUsername(Objects.requireNonNull(username).trim().toLowerCase());
   }
 }
