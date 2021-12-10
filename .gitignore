@@ -5,3 +5,5 @@ build/
 .gradle/
 docker/
 
+node_modules
+.nuxt

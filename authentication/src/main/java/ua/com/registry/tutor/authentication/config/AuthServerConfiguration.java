@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -22,6 +23,7 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
 
   private final AuthenticationManager authenticationManager;
   private final AuthClientService authClientService;
+  private final UserDetailsService userDetailsService;
 
   @Value("${jwt.key}")
   private String jwtKey;
@@ -35,6 +37,7 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
   public void configure(AuthorizationServerEndpointsConfigurer configurer) {
     configurer.authenticationManager(authenticationManager)
         .tokenStore(tokenStore())
+        .userDetailsService(userDetailsService)
         .accessTokenConverter(jwtAccessTokenConverter());
   }
 
