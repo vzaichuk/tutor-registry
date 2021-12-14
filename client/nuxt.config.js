@@ -31,7 +31,8 @@ module.exports = {
   plugins: [
     '~/plugins/repository',
     '~/plugins/helper',
-    '~/plugins/notification'
+    '~/plugins/notification',
+    '~/plugins/axios'
   ],
 
   axios: {
@@ -57,8 +58,8 @@ module.exports = {
           property: 'user'
         },
         endpoints: {
-          login: { url: '/authorization/login/credentials', method: 'post' },
-          refresh: { url: '/authorization/login/refresh', method: 'post' },
+          login: { url: '/authentication/login/credentials', method: 'post' },
+          refresh: { url: '/authentication/login/refresh', method: 'post' },
           user: { url: '/account/me', method: 'get' },
           logout: false
         }
@@ -74,7 +75,7 @@ module.exports = {
   },
 
   proxy: {
-    '/authorization': {target: 'http://localhost:8080', secure: false},
+    '/authentication': {target: 'http://localhost:8080', secure: false},
     '/account': {target: 'http://localhost:8080', secure: false},
     '/notification': {target: 'http://localhost:8080', secure: false}
   },
@@ -82,9 +83,5 @@ module.exports = {
   generate: {
     dir: process.env.DIST_DIR || 'dist',
     devtools: process.env.NODE_ENV !== 'production'
-  },
-
-  build: {
-    publicPath: '/client/_nuxt'
   }
 }

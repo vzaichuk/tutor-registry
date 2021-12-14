@@ -7,3 +7,5 @@ docker/
 
 node_modules
 .nuxt
+client/node
+client/dist
