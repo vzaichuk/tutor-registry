@@ -12,6 +12,9 @@
       <input v-model="password" type="password" class="form-control" placeholder="Password" @keypress.enter="login" required="" />
 
       <button @click="login" type="button" class="btn btn-lg btn-primary btn-block">Log in</button>
+      <div class="mt-2 text-left">
+        <NuxtLink to="/auth/signup" class="text-dark mt-4">Registration</NuxtLink>
+      </div>
       
       <p class="mt-5 mb-3 text-muted">© 2021</p>
     </form>

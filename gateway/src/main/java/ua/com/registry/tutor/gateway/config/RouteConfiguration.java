@@ -41,11 +41,13 @@ public class RouteConfiguration {
 
   @Value("${GATEWAY_CLIENT_SECRET}")
   private String gatewayClientSecret;
+  @Value("${SERVICE_SCHEME:lb}")
+  private String serviceScheme;
 
   @Bean
   RouteLocator routeLocator(RouteLocatorBuilder builder) {
     return builder.routes()
-        .route("authorization_via_credentials",
+        .route("authentication_via_credentials",
             route -> route.path("/authentication/login/credentials")
                 .and().method(HttpMethod.POST)
                 .filters(filter -> filter.stripPrefix(1)
@@ -56,7 +58,7 @@ public class RouteConfiguration {
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
                 .uri(getAuthorizationServiceUri())
         )
-        .route("authorization_via_refresh_token",
+        .route("authentication_via_refresh_token",
             route -> route.path("/authentication/login/refresh")
                 .and().method(HttpMethod.POST)
                 .filters(filter -> filter.stripPrefix(1)
@@ -65,6 +67,11 @@ public class RouteConfiguration {
                     .addRequestParameter(SCOPE, SCOPE_READ)
                     .filter(authorizationToParamsGatewayFilterFactory.apply(new Config()))
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
+                .uri(getAuthorizationServiceUri())
+        )
+        .route("authentication_service_requests",
+            route -> route.path("/authentication/**")
+                .filters(filter -> filter.stripPrefix(1))
                 .uri(getAuthorizationServiceUri())
         )
         .route("account_get",
@@ -88,11 +95,11 @@ public class RouteConfiguration {
   }
 
   private String getAuthorizationServiceUri() {
-    return "lb://" + authorizationServiceName;
+    return serviceScheme + "://" + authorizationServiceName;
   }
 
   private String getAccountServiceUri() {
-    return "lb://" + accountServiceName;
+    return serviceScheme + "://" + accountServiceName;
   }
 
   private String getClientServiceUri() {

@@ -1,7 +1,7 @@
 export default async (ctx, inject) => {
   const repositoriesConfig = [
     'account',
-    'authorization',
+    'authentication',
     'notification'
   ].reduce((acc, name) => {
     acc[name.toLowerCase().replace(/-(.)/g, (match, group) => group.toUpperCase())] = name;
