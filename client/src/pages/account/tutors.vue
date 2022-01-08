@@ -18,7 +18,9 @@
 export default {
   name: 'page-tutors',
 
-  layout: 'account'
+  layout(ctx) {
+    return 'account';
+  }
 };
 </script>
 

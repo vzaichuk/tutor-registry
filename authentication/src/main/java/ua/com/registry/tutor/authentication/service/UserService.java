@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.registry.tutor.authentication.domain.dto.RoleDto;
 import ua.com.registry.tutor.authentication.domain.dto.UserSignupDto;
 import ua.com.registry.tutor.authentication.domain.entity.User;
-import ua.com.registry.tutor.authentication.domain.enums.UserRole;
 import ua.com.registry.tutor.authentication.domain.repository.UserRepository;
+import ua.com.registry.tutor.common.domain.enums.UserRole;
 import ua.com.registry.tutor.common.service.AuthenticationHelper;
 
 @Service

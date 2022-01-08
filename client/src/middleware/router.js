@@ -1,6 +1,7 @@
 const ROLE_SELECT_URL = '/account/role';
+const INDEX_URL = '/';
 
-const IGNORED_PATHS = [ROLE_SELECT_URL, '/'];
+const IGNORED_PATHS = [ROLE_SELECT_URL, INDEX_URL];
 
 export default function (ctx) {
   const roleIsChosen = ctx.store.getters['getField']('auth.roleChosen');

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.StringUtils;
-import ua.com.registry.tutor.authentication.domain.enums.UserRole;
+import ua.com.registry.tutor.common.domain.enums.UserRole;
 
 @Data
 @Entity

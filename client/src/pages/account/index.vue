@@ -2,8 +2,8 @@
   <main role="main">
     <div class="jumbotron">
       <div class="col-sm-10 mx-auto">
-        <h1>My username</h1>
-        <p class="mt-5">My bio...</p>
+        <h1>{{ username }}</h1>
+        <p class="mt-5">{{ bio }}</p>
       </div>
     </div>
   </main>
@@ -13,6 +13,16 @@
 export default {
   name: 'page-account',
 
-  layout: 'account'
+  layout: 'account',
+
+  computed: {
+    username() {
+      return this.$auth.user.username || 'user' + this.$auth.user.id;
+    },
+
+    bio() {
+      return this.$auth.user.bio || '<bio is empty>';
+    }
+  }
 };
 </script>

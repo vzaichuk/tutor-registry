@@ -1,4 +1,4 @@
-package ua.com.registry.tutor.authentication.domain.enums;
+package ua.com.registry.tutor.common.domain.enums;
 
 import java.util.Arrays;
 import lombok.Getter;

@@ -55,12 +55,12 @@ module.exports = {
           maxAge: 60 * 60 * 24 * 30
         },
         user: {
-          property: 'user'
+          property: false
         },
         endpoints: {
           login: { url: '/authentication/login/credentials', method: 'post' },
           refresh: { url: '/authentication/login/refresh', method: 'post' },
-          user: { url: '/account/me', method: 'get' },
+          user: { url: '/account/account', method: 'get' },
           logout: false
         }
       }

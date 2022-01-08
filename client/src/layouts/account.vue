@@ -13,7 +13,7 @@
               <NuxtLink to="/account" class="nav-link">Account</NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink to="/tutors" class="nav-link">Tutors</NuxtLink>
+              <NuxtLink to="/account/tutors" class="nav-link">Tutors</NuxtLink>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
@@ -26,8 +26,16 @@
           </ul>
         </div>
       </nav>
-      
-      <nuxt />
+
+      <nuxt v-if="isActive()" />
+      <div v-else>
+        <div v-if="isRejected()">
+          <h2 class="text-center mt-5">Your profile was rejected</h2>
+        </div>
+        <div v-else>
+          <h2 class="text-center mt-5">Your profile is on review</h2>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +47,14 @@ export default {
   methods: {
     logout() {
       this.$auth.logout().then(() => this.$router.push('/'));
+    },
+
+    isActive() {
+      return this.$auth.loggedIn && this.$auth.user.status == 1;
+    },
+
+    isRejected() {
+      return this.$auth.loggenIn && this.$auth.user.status == 2;
     }
   }
 }
