@@ -1,5 +1,6 @@
 package ua.com.registry.tutor.authentication.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -13,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.StringUtils;
 import ua.com.registry.tutor.authentication.domain.enums.UserRole;
 
 @Data
@@ -28,16 +31,17 @@ public class User {
   private String username;
 
   @Column
+  @JsonIgnore
   private String password;
 
   @Column(name = "is_enabled")
   private boolean enabled;
 
   @Column
-  private String roles;
+  private String roles = Strings.EMPTY;
 
   public Set<UserRole> getRoles() {
-    return Objects.nonNull(roles)
+    return StringUtils.hasText(roles)
         ? Arrays.stream(roles.split(" ")).map(UserRole::of).collect(Collectors.toSet())
         : Collections.emptySet();
   }

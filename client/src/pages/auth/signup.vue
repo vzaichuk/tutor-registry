@@ -23,14 +23,6 @@
       
       <p class="mt-5 mb-3 text-muted">© 2021</p>
     </form>
-    <div v-if="false">
-      <img class="mb-4" src="/img/matrix.jpg" style="max-width:400px;" />
-      <div>
-        <h4 class="mb-4">Now, choose your side wisely</h4>
-        <button class="btn btn-danger px-5 mr-5">Student</button>
-        <button class="btn btn-primary px-5">Tutor</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -61,7 +53,10 @@ export default {
     signup() {
       this.cleanErrors();
       this.$repository.authentication.signup(this.model)
-          .then(console.log)
+          .then(response => {
+            this.$auth
+                .loginWith('local', {auth: {username: response.username, password: this.model.password}});
+          })
           .catch(error => this.$errorHandler.handle(this, error, this.populateErrors));
     },
 

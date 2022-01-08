@@ -30,6 +30,7 @@ dependencies {
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
     implementation 'com.sun.xml.bind:jaxb-impl:2.3.2'
     implementation 'mysql:mysql-connector-java:8.0.27'
+    implementation project(':common')
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

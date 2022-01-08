@@ -70,7 +70,7 @@ module.exports = {
   router: {
     base: (process.env.PATH_PREFIX || '/client'),
     middleware: [
-      'auth'
+      'auth', 'router'
     ]
   },
 

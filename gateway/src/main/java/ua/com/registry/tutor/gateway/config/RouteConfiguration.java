@@ -30,9 +30,9 @@ public class RouteConfiguration {
   private String accountServicePort;
 
   @Value("${AUTHENTICATION_HOST}")
-  private String authorizationServiceName;
+  private String authenticationServiceName;
   @Value("${AUTHENTICATION_PORT}")
-  private String authorizationServicePort;
+  private String authenticationServicePort;
 
   @Value("${CLIENT_HOST}")
   private String clientServiceName;
@@ -56,7 +56,7 @@ public class RouteConfiguration {
                     .addRequestParameter(SCOPE, SCOPE_READ)
                     .filter(authorizationToParamsGatewayFilterFactory.apply(new Config()))
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
-                .uri(getAuthorizationServiceUri())
+                .uri(getAuthenticationServiceUri())
         )
         .route("authentication_via_refresh_token",
             route -> route.path("/authentication/login/refresh")
@@ -67,12 +67,12 @@ public class RouteConfiguration {
                     .addRequestParameter(SCOPE, SCOPE_READ)
                     .filter(authorizationToParamsGatewayFilterFactory.apply(new Config()))
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
-                .uri(getAuthorizationServiceUri())
+                .uri(getAuthenticationServiceUri())
         )
         .route("authentication_service_requests",
             route -> route.path("/authentication/**")
                 .filters(filter -> filter.stripPrefix(1))
-                .uri(getAuthorizationServiceUri())
+                .uri(getAuthenticationServiceUri())
         )
         .route("account_get",
             route -> route
@@ -94,8 +94,8 @@ public class RouteConfiguration {
         .build();
   }
 
-  private String getAuthorizationServiceUri() {
-    return serviceScheme + "://" + authorizationServiceName;
+  private String getAuthenticationServiceUri() {
+    return serviceScheme + "://" + authenticationServiceName;
   }
 
   private String getAccountServiceUri() {

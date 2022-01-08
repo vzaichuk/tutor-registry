@@ -17,6 +17,6 @@ public enum UserRole {
   public static UserRole of(String value) {
     return Arrays.stream(UserRole.values())
         .filter(r -> r.getValue().equals(value)).findAny()
-        .orElseThrow(IllegalStateException::new);
+        .orElseThrow(() -> new IllegalStateException("User role is not supported"));
   }
 }
