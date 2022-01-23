@@ -57,6 +57,19 @@ services:
       - './docker/mysql/data:/var/lib/mysql'
       - './docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf'
       - './docker/mysql/sql:/docker-entrypoint-initdb.d'
+
+  mongo-service:
+    image: mongo:5.0.5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - bus
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    volumes:
+      - './docker/mongo/data:/data/db'
+
 networks:
   bus:
 #    driver: bridge

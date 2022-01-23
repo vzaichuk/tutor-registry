@@ -55,7 +55,8 @@ export default {
       this.$repository.authentication.signup(this.model)
           .then(response => {
             this.$auth
-                .loginWith('local', {auth: {username: response.username, password: this.model.password}});
+                .loginWith('local', {auth: {username: response.username, password: this.model.password}})
+                .then(() => this.$router.push('/account'));
           })
           .catch(error => this.$errorHandler.handle(this, error, this.populateErrors));
     },

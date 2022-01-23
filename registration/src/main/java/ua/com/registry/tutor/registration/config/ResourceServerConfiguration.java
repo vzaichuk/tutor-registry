@@ -1,4 +1,4 @@
-package ua.com.registry.tutor.account.config;
+package ua.com.registry.tutor.registration.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

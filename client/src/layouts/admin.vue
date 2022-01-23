@@ -10,18 +10,12 @@
         <div class="collapse navbar-collapse" id="navbarsExample09">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <NuxtLink to="/account" class="nav-link">Account</NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink to="/account/tutors" class="nav-link">Tutors</NuxtLink>
+              <NuxtLink to="/admin/applications" class="nav-link">Applications</NuxtLink>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <NuxtLink to="/notifications" class="nav-link">Notifications</NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink to="/settings" class="nav-link">Settings</NuxtLink>
             </li>
             <li class="nav-item">
               <a href="#" @click="logout" class="nav-link">Log out</a>
@@ -30,34 +24,18 @@
         </div>
       </nav>
 
-      <nuxt v-if="isActive()" />
-      <div v-else>
-        <div v-if="isRejected()">
-          <h2 class="text-center mt-5">Your profile was rejected</h2>
-        </div>
-        <div v-else>
-          <h2 class="text-center mt-5">Your profile is on review</h2>
-        </div>
-      </div>
+      <nuxt />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'layout-account',
+  name: 'layout-admin',
 
   methods: {
     logout() {
       this.$auth.logout().then(() => this.$router.push('/'));
-    },
-
-    isActive() {
-      return this.$auth.loggedIn && this.$auth.user.status == 1;
-    },
-
-    isRejected() {
-      return this.$auth.loggenIn && this.$auth.user.status == 2;
     }
   }
 }

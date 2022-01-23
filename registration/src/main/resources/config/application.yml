@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ${REGISTRATION_HOST}
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT:27017}
+      database: ${REGISTRATION_DB_NAME}
+      username: ${REGISTRATION_DB_USER}
+      password: ${REGISTRATION_DB_PASS}
+
+server:
+  port: ${REGISTRATION_PORT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka
+
+jwt:
+  key: "0xCODE"

@@ -29,6 +29,9 @@ public class RouteConfiguration {
   @Value("${ACCOUNT_PORT}")
   private String accountServicePort;
 
+  @Value("${REGISTRATION_HOST}")
+  private String registrationServiceName;
+
   @Value("${AUTHENTICATION_HOST}")
   private String authenticationServiceName;
   @Value("${AUTHENTICATION_PORT}")
@@ -77,9 +80,13 @@ public class RouteConfiguration {
         .route("account_get",
             route -> route
                 .path("/account/**")
-                .and().method(HttpMethod.GET)
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(getAccountServiceUri()))
+        .route("registration",
+            route -> route
+                .path("/registration/**")
+                .filters(filter -> filter.stripPrefix(1))
+                .uri(getRegistrationServiceUri()))
         .route("client_get",
             route -> route
                 .path("/", "/client/**")
@@ -100,6 +107,10 @@ public class RouteConfiguration {
 
   private String getAccountServiceUri() {
     return serviceScheme + "://" + accountServiceName;
+  }
+
+  private String getRegistrationServiceUri() {
+    return serviceScheme + "://" + registrationServiceName;
   }
 
   private String getClientServiceUri() {
