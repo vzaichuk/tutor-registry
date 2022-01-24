@@ -5,5 +5,6 @@ export default $axios => ({
   getOne(id) { return $axios.$get(`${baseUrl}/account/${id}`); },
   accept(id, decision) { return $axios.$put(`${baseUrl}/account/accept`, {id, decision}); },
   getAllTutors(params) { return $axios.$get(`${baseUrl}/tutor/all`, {params}); },
-  getMyTutors(params) { return $axios.$get(`${baseUrl}/tutor/my`, {params}); }
+  getMyTutors: () => $axios.$get(`${baseUrl}/tutor/my`),
+  assign: id => $axios.$post(`${baseUrl}/account/assign/${id}`)
 });

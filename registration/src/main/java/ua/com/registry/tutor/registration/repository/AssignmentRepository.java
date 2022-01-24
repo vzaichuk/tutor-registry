@@ -10,6 +10,6 @@ public interface AssignmentRepository extends MongoRepository<Assignment, String
 
   Optional<Assignment> findByTutorAccountId(int tutorAccountId);
 
-  @Query("{studentAccountId:?0}")
+  @Query("{studentAccountIds: {$elemMatch: {$eq: ?0}}}")
   List<Assignment> findAllByStudentAccountId(int studentAccountId);
 }

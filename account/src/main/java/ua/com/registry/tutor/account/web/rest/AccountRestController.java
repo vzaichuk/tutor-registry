@@ -2,6 +2,7 @@ package ua.com.registry.tutor.account.web.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.registry.tutor.account.domain.dto.AcceptRequestDto;
 import ua.com.registry.tutor.account.domain.entity.Account;
@@ -42,11 +42,11 @@ public class AccountRestController {
     return ResponseEntity.ok(accountService.getAccountById(id));
   }
 
-  @PostMapping("/assign")
+  @PostMapping("/assign/{tutorId}")
   @PreAuthorize("hasRole('STUDENT')")
   public ResponseEntity<Boolean> assignStudentToTutor(
-      @RequestParam int tutorId, Authentication authentication,
-      @RequestHeader("Authorization") String token
+      @PathVariable int tutorId, Authentication authentication,
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token
   ) {
     return ResponseEntity.ok(accountService.assignStudentToTutor(tutorId, authentication, token));
   }

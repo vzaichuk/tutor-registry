@@ -16,6 +16,12 @@ public class AssignmentService {
 
   private final AssignmentRepository assignmentRepository;
 
+  public int getAssignedTutorAccountId(int studentId) {
+    return assignmentRepository.findAllByStudentAccountId(studentId).stream()
+        .map(Assignment::getTutorAccountId)
+        .findAny().orElse(0);
+  }
+
   @Transactional
   public boolean assignStudent(int tutorAccountId, int studentAccountId) {
     // Remove assignments from other tutors.

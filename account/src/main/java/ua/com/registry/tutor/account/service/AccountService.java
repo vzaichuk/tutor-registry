@@ -1,8 +1,11 @@
 package ua.com.registry.tutor.account.service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -103,6 +107,31 @@ public class AccountService {
         UserRole.TUTOR.getValue(), AccountStatus.ACTIVE.getValue(), pageable);
   }
 
+  public List<Account> getMyTutors(Authentication authentication, String token) {
+    Account account = getAccountFromAuthentication(authentication);
+
+    // Send request.
+    if (!StringUtils.hasText(token)) {
+      throw new IllegalStateException("Authorization token is absent");
+    }
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, token);
+
+    HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(null, headers);
+
+    Integer tutorId = restTemplate.exchange(serviceUriProvider
+        .getRegistrationAssignedUri(account.getId()), HttpMethod.GET, request, Integer.class)
+        .getBody();
+
+    if (tutorId == null || tutorId < 1) {
+      return Collections.emptyList();
+    }
+
+    return accountRepository.findById(tutorId)
+        .stream().collect(Collectors.toList());
+  }
+
   public Boolean assignStudentToTutor(
       int tutorAccountId, Authentication authentication, String token
   ) {
@@ -114,9 +143,11 @@ public class AccountService {
       throw new IllegalStateException("Authorization token is absent");
     }
 
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, token);
+
     HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(
-        new AssignmentRequestDto(tutorAccount.getId(), studentAccount.getId()));
-    request.getHeaders().add(HttpHeaders.AUTHORIZATION, token);
+        new AssignmentRequestDto(tutorAccount.getId(), studentAccount.getId()), headers);
 
     return restTemplate
         .postForObject(serviceUriProvider.getRegistrationAssignUri(), request, Boolean.class);

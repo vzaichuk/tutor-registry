@@ -39,7 +39,7 @@ public class ServiceUriProvider {
   }
 
   public String getGatewayUri() {
-    return serviceScheme + "://" + registrationServiceName;
+    return serviceScheme + "://" + gatewayServiceName;
   }
 
   public String getClientUri() {
@@ -48,5 +48,9 @@ public class ServiceUriProvider {
 
   public String getRegistrationAssignUri() {
     return getGatewayUri() + "/registration/assign";
+  }
+
+  public String getRegistrationAssignedUri(int id) {
+    return getGatewayUri() + "/registration/assigned/" + id;
   }
 }
