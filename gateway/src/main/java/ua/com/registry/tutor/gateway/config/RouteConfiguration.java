@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import ua.com.registry.tutor.common.service.ServiceUriProvider;
 import ua.com.registry.tutor.gateway.filter.AuthorizationToParamsGatewayFilterFactory;
 import ua.com.registry.tutor.gateway.filter.AuthorizationToParamsGatewayFilterFactory.Config;
 
@@ -23,29 +24,10 @@ public class RouteConfiguration {
   public static final String SCOPE_READ = "read";
 
   private final AuthorizationToParamsGatewayFilterFactory authorizationToParamsGatewayFilterFactory;
-
-  @Value("${ACCOUNT_HOST}")
-  private String accountServiceName;
-  @Value("${ACCOUNT_PORT}")
-  private String accountServicePort;
-
-  @Value("${REGISTRATION_HOST}")
-  private String registrationServiceName;
-
-  @Value("${AUTHENTICATION_HOST}")
-  private String authenticationServiceName;
-  @Value("${AUTHENTICATION_PORT}")
-  private String authenticationServicePort;
-
-  @Value("${CLIENT_HOST}")
-  private String clientServiceName;
-  @Value("${CLIENT_PORT}")
-  private String clientServicePort;
+  private final ServiceUriProvider serviceUriProvider;
 
   @Value("${GATEWAY_CLIENT_SECRET}")
   private String gatewayClientSecret;
-  @Value("${SERVICE_SCHEME:lb}")
-  private String serviceScheme;
 
   @Bean
   RouteLocator routeLocator(RouteLocatorBuilder builder) {
@@ -59,7 +41,7 @@ public class RouteConfiguration {
                     .addRequestParameter(SCOPE, SCOPE_READ)
                     .filter(authorizationToParamsGatewayFilterFactory.apply(new Config()))
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
-                .uri(getAuthenticationServiceUri())
+                .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("authentication_via_refresh_token",
             route -> route.path("/authentication/login/refresh")
@@ -70,50 +52,34 @@ public class RouteConfiguration {
                     .addRequestParameter(SCOPE, SCOPE_READ)
                     .filter(authorizationToParamsGatewayFilterFactory.apply(new Config()))
                     .setRequestHeader(HttpHeaders.AUTHORIZATION, gatewayClientSecret))
-                .uri(getAuthenticationServiceUri())
+                .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("authentication_service_requests",
             route -> route.path("/authentication/**")
                 .filters(filter -> filter.stripPrefix(1))
-                .uri(getAuthenticationServiceUri())
+                .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("account_get",
             route -> route
                 .path("/account/**")
                 .filters(filter -> filter.stripPrefix(1))
-                .uri(getAccountServiceUri()))
+                .uri(serviceUriProvider.getAccountUri()))
         .route("registration",
             route -> route
                 .path("/registration/**")
                 .filters(filter -> filter.stripPrefix(1))
-                .uri(getRegistrationServiceUri()))
+                .uri(serviceUriProvider.getRegistrationUri()))
         .route("client_get",
             route -> route
                 .path("/", "/client/**")
                 .and().method(HttpMethod.GET)
                 .filters(filter -> filter.stripPrefix(1))
-                .uri(getClientServiceUri()))
+                .uri(serviceUriProvider.getClientUri()))
         .route("img_get",
             route -> route
                 .path("/img/**")
                 .and().method(HttpMethod.GET)
-                .uri(getClientServiceUri()))
+                .uri(serviceUriProvider.getClientUri()))
         .build();
-  }
-
-  private String getAuthenticationServiceUri() {
-    return serviceScheme + "://" + authenticationServiceName;
-  }
-
-  private String getAccountServiceUri() {
-    return serviceScheme + "://" + accountServiceName;
-  }
-
-  private String getRegistrationServiceUri() {
-    return serviceScheme + "://" + registrationServiceName;
-  }
-
-  private String getClientServiceUri() {
-    return "http://" + clientServiceName + ":" + clientServicePort;
   }
 }

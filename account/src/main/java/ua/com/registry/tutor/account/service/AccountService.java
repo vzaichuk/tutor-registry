@@ -5,23 +5,33 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 import ua.com.registry.tutor.account.domain.dto.AcceptRequestDto;
 import ua.com.registry.tutor.account.domain.entity.Account;
 import ua.com.registry.tutor.account.domain.enums.AccountStatus;
 import ua.com.registry.tutor.account.domain.repository.AccountRepository;
+import ua.com.registry.tutor.common.domain.dto.AssignmentRequestDto;
 import ua.com.registry.tutor.common.domain.enums.UserRole;
 import ua.com.registry.tutor.common.service.AuthenticationHelper;
+import ua.com.registry.tutor.common.service.ServiceUriProvider;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
+  @LoadBalanced
+  private final RestTemplate restTemplate;
   private final AccountRepository accountRepository;
   private final AuthenticationHelper authenticationHelper;
+  private final ServiceUriProvider serviceUriProvider;
   private final Account EMPTY_ACCOUNT = new Account();
 
   @PostConstruct
@@ -91,6 +101,25 @@ public class AccountService {
   public Page<Account> getAllTutors(Pageable pageable) {
     return accountRepository.findAllByRoleAndStatus(
         UserRole.TUTOR.getValue(), AccountStatus.ACTIVE.getValue(), pageable);
+  }
+
+  public Boolean assignStudentToTutor(
+      int tutorAccountId, Authentication authentication, String token
+  ) {
+    Account studentAccount = getAccountFromAuthentication(authentication);
+    Account tutorAccount = getAccountById(tutorAccountId);
+
+    // Send request.
+    if (!StringUtils.hasText(token)) {
+      throw new IllegalStateException("Authorization token is absent");
+    }
+
+    HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(
+        new AssignmentRequestDto(tutorAccount.getId(), studentAccount.getId()));
+    request.getHeaders().add(HttpHeaders.AUTHORIZATION, token);
+
+    return restTemplate
+        .postForObject(serviceUriProvider.getRegistrationAssignUri(), request, Boolean.class);
   }
 
   private Account create(int userId, UserRole role) {

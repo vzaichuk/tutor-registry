@@ -9,7 +9,8 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${AUTHENTICATION_DB_NAME}
     username: ${AUTHENTICATION_DB_USER}
     password: ${AUTHENTICATION_DB_PASS}
-
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 server:
   port: ${AUTHENTICATION_PORT}
 
