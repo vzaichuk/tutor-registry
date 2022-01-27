@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ${NOTIFICATION_HOST}
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT:27017}
+      database: ${NOTIFICATION_DB_NAME}
+      username: ${NOTIFICATION_DB_USER}
+      password: ${NOTIFICATION_DB_PASS}
+
+server:
+  port: ${NOTIFICATION_PORT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka
+
+jwt:
+  key: "0xCODE"
