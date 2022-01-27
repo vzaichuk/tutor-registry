@@ -69,6 +69,11 @@ public class RouteConfiguration {
                 .path("/registration/**")
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(serviceUriProvider.getRegistrationUri()))
+        .route("notification",
+            route -> route
+                .path("/notification/**")
+                .filters(filter -> filter.stripPrefix(1))
+                .uri(serviceUriProvider.getNotificationUri()))
         .route("client_get",
             route -> route
                 .path("/", "/client/**")

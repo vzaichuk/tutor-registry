@@ -42,6 +42,14 @@ services:
 #    networks:
 #      - bus
 #    env_file: .env
+#  notification-service:
+#    build: notification
+#    image: notification-image
+#    depends_on:
+#      - ${DISCOVERY_HOST}
+#    networks:
+#      - bus
+#    env_file: .env
 #  client-service:
 #    build: client
 #    image: client-image

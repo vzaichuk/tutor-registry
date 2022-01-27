@@ -15,6 +15,9 @@ public class ServiceUriProvider {
   @Value("${REGISTRATION_HOST}")
   private String registrationServiceName;
 
+  @Value("${NOTIFICATION_HOST}")
+  private String notificationServiceName;
+
   @Value("${AUTHENTICATION_HOST}")
   private String authenticationServiceName;
 
@@ -36,6 +39,10 @@ public class ServiceUriProvider {
 
   public String getRegistrationUri() {
     return serviceScheme + "://" + registrationServiceName;
+  }
+
+  public String getNotificationUri() {
+    return serviceScheme + "://" + notificationServiceName;
   }
 
   public String getGatewayUri() {
