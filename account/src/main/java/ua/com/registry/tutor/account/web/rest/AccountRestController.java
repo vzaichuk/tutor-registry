@@ -26,8 +26,10 @@ public class AccountRestController {
   private final AccountService accountService;
 
   @GetMapping
-  public ResponseEntity<?> getAccount(Authentication authentication) {
-    return ResponseEntity.ok(accountService.getAccountFromAuthentication(authentication));
+  public ResponseEntity<?> getAccount(
+      Authentication authentication, @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+  ) {
+    return ResponseEntity.ok(accountService.getAccountFromAuthentication(authentication, token));
   }
 
   @GetMapping("/review")
@@ -53,7 +55,9 @@ public class AccountRestController {
 
   @PutMapping("/accept")
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<Account> accept(@RequestBody AcceptRequestDto dto) {
-    return ResponseEntity.ok(accountService.accept(dto));
+  public ResponseEntity<Account> accept(
+      @RequestBody AcceptRequestDto dto, @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+  ) {
+    return ResponseEntity.ok(accountService.accept(dto, token));
   }
 }

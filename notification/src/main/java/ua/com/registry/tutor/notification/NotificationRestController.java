@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.registry.tutor.common.service.AuthenticationHelper;
-import ua.com.registry.tutor.notification.domain.dto.CreateNotificationDto;
+import ua.com.registry.tutor.common.domain.dto.CreateNotificationDto;
 import ua.com.registry.tutor.notification.service.NotificationService;
 
 @RestController

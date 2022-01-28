@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ua.com.registry.tutor.notification.domain.dto.CreateNotificationDto;
+import ua.com.registry.tutor.common.domain.dto.CreateNotificationDto;
 import ua.com.registry.tutor.notification.domain.entity.Notification;
 import ua.com.registry.tutor.notification.domain.entity.Notification.Message;
 import ua.com.registry.tutor.notification.repository.NotificationRepository;

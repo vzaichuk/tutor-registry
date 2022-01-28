@@ -36,6 +36,7 @@ public class AccountService {
   private final AccountRepository accountRepository;
   private final AuthenticationHelper authenticationHelper;
   private final ServiceUriProvider serviceUriProvider;
+  private final NotificationService notificationService;
   private final Account EMPTY_ACCOUNT = new Account();
 
   @PostConstruct
@@ -47,7 +48,7 @@ public class AccountService {
     EMPTY_ACCOUNT.setStatus(AccountStatus.REVIEW.getValue());
   }
 
-  public Account getAccountFromAuthentication(Authentication authentication) {
+  public Account getAccountFromAuthentication(Authentication authentication, String token) {
     int userId = authenticationHelper.getUserId(authentication);
 
     Optional<Account> accountOptional = accountRepository.findOneByUserId(userId);
@@ -67,7 +68,7 @@ public class AccountService {
       Account account = persist(create(
           userId, UserRole.of(authentication.getAuthorities().iterator().next().getAuthority())));
 
-      // TODO: Create notification for admin.
+      notificationService.add(0, "New user account created", token);
 
       return account;
     }
@@ -84,7 +85,7 @@ public class AccountService {
         .orElseThrow(() -> new NoSuchElementException("Account not found"));
   }
 
-  public Account accept(AcceptRequestDto dto) {
+  public Account accept(AcceptRequestDto dto, String token) {
     Account account = accountRepository.findById(dto.getId())
         .orElseThrow(() -> new NoSuchElementException("Account not found"));
 
@@ -97,7 +98,11 @@ public class AccountService {
 
     account = persist(account);
 
-    // TODO: Create notification for user about making a decision about his application.
+    notificationService.add(
+        account.getUserId(),
+        "Your application has been "
+            + (account.getStatus() == AccountStatus.ACTIVE.getValue() ? "accepted" : "declined"),
+        token);
 
     return account;
   }
@@ -108,7 +113,7 @@ public class AccountService {
   }
 
   public List<Account> getMyTutors(Authentication authentication, String token) {
-    Account account = getAccountFromAuthentication(authentication);
+    Account account = getAccountFromAuthentication(authentication, token);
 
     // Send request.
     if (!StringUtils.hasText(token)) {
@@ -135,7 +140,7 @@ public class AccountService {
   public Boolean assignStudentToTutor(
       int tutorAccountId, Authentication authentication, String token
   ) {
-    Account studentAccount = getAccountFromAuthentication(authentication);
+    Account studentAccount = getAccountFromAuthentication(authentication, token);
     Account tutorAccount = getAccountById(tutorAccountId);
 
     // Send request.

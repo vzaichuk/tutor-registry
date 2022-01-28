@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceUriProvider {
 
+  private static final String NOTIFICATION_PATH = "/notification";
+
   @Value("${GATEWAY_HOST}")
   private String gatewayServiceName;
 
@@ -59,5 +61,21 @@ public class ServiceUriProvider {
 
   public String getRegistrationAssignedUri(int id) {
     return getGatewayUri() + "/registration/assigned/" + id;
+  }
+
+  public String getNotificationCreateUrl() {
+    return getNotificationUri() + NOTIFICATION_PATH + "/add";
+  }
+
+  public String getNotificationSeenUrl(String id) {
+    return getNotificationUri() + NOTIFICATION_PATH + "/seen/" + id;
+  }
+
+  public String getNotificationRemoveUrl(String id) {
+    return getNotificationUri() + NOTIFICATION_PATH + "/remove/" + id;
+  }
+
+  public String getNotificationRemoveAllUrl() {
+    return getNotificationUri() + NOTIFICATION_PATH + "/remove-all";
   }
 }
