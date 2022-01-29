@@ -1,5 +1,7 @@
 export const ROLE = {
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  TUTOR: 'TUTOR',
+  STUDENT: 'STUDENT'
 };
 
 export const ACCOUNT_STATUS = {

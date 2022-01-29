@@ -22,12 +22,16 @@
 </template>
 
 <script>
+import errorHanlderMixin from '~/components/mixins/error-handler';
+
 export default {
   name: 'page-auth-login',
 
   layout: 'auth',
 
   auth: 'guest',
+
+  mixins: [errorHanlderMixin],
 
   data: function() {
     return {
@@ -41,6 +45,7 @@ export default {
     login: function() {
       this.$auth
           .loginWith('local', {auth: {username: this.email, password: this.password}})
+          .catch(this.handleError)
           .then(() => this.$router.push('/account'));
     }
   }

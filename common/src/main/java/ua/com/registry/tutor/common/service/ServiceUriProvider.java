@@ -64,18 +64,18 @@ public class ServiceUriProvider {
   }
 
   public String getNotificationCreateUrl() {
-    return getNotificationUri() + NOTIFICATION_PATH + "/add";
+    return getGatewayUri() + NOTIFICATION_PATH + "/add";
   }
 
   public String getNotificationSeenUrl(String id) {
-    return getNotificationUri() + NOTIFICATION_PATH + "/seen/" + id;
+    return getGatewayUri() + NOTIFICATION_PATH + "/seen/" + id;
   }
 
   public String getNotificationRemoveUrl(String id) {
-    return getNotificationUri() + NOTIFICATION_PATH + "/remove/" + id;
+    return getGatewayUri() + NOTIFICATION_PATH + "/remove/" + id;
   }
 
   public String getNotificationRemoveAllUrl() {
-    return getNotificationUri() + NOTIFICATION_PATH + "/remove-all";
+    return getGatewayUri() + NOTIFICATION_PATH + "/remove-all";
   }
 }

@@ -34,7 +34,7 @@
 export default {
   name: 'page-admin-applications',
 
-  layout: 'admin',
+  layout: 'account',
 
   fetch() {
     this.getAccounts();

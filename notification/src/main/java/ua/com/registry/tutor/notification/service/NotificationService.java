@@ -2,7 +2,10 @@ package ua.com.registry.tutor.notification.service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.com.registry.tutor.common.domain.dto.CreateNotificationDto;
@@ -15,6 +18,17 @@ import ua.com.registry.tutor.notification.repository.NotificationRepository;
 public class NotificationService {
 
   private final NotificationRepository notificationRepository;
+
+  public Long getUnseenAmount(int userId) {
+    Notification notification = getByUserId(userId);
+    return notification.getMessages().values().stream()
+        .filter(Predicate.not(Message::isSeen)).count();
+  }
+
+  public List<Message> getAll(int userId) {
+    Notification notification = getByUserId(userId);
+    return new LinkedList<>(notification.getMessages().values());
+  }
 
   public boolean add(CreateNotificationDto dto) {
     Notification notification = getByUserId(dto.getUserId());

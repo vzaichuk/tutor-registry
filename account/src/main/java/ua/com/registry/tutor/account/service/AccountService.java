@@ -154,8 +154,21 @@ public class AccountService {
     HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(
         new AssignmentRequestDto(tutorAccount.getId(), studentAccount.getId()), headers);
 
-    return restTemplate
+    Boolean succeeded = restTemplate
         .postForObject(serviceUriProvider.getRegistrationAssignUri(), request, Boolean.class);
+
+    if (Boolean.TRUE.equals(succeeded)) {
+      notificationService.add(
+          studentAccount.getUserId(),
+          "You've been successfully assigned to new tutor",
+          token);
+      notificationService.add(
+          tutorAccount.getUserId(),
+          "You've been assigned with new student",
+          token);
+    }
+
+    return succeeded;
   }
 
   private Account create(int userId, UserRole role) {

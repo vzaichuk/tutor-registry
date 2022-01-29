@@ -36,7 +36,7 @@ import {ACCOUNT_STATUS} from '~/utils/constants';
 export default {
   name: 'page-admin-applications-view',
 
-  layout: 'admin',
+  layout: 'account',
 
   fetch() {
     this.getAccount(this.$route.params.id);

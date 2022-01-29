@@ -7,21 +7,36 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExample09">
+        <div v-if="isAdmin()" class="collapse navbar-collapse" id="navbarsExample09">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <NuxtLink to="/admin/applications" class="nav-link">Applications</NuxtLink>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <NuxtLink to="/notifications" :class="['nav-link', unseenNotifications > 0 ? 'labelable' : '']">Notifications</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <a href="#" @click="logout" class="nav-link">Log out</a>
+            </li>
+          </ul>
+        </div>
+        <div v-else class="collapse navbar-collapse" id="navbarsExample09">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               <NuxtLink to="/account" class="nav-link">Account</NuxtLink>
             </li>
-            <li class="nav-item">
+            <li v-if="isTutor()" class="nav-item">
+              <NuxtLink to="/account/students" class="nav-link">Students</NuxtLink>
+            </li>
+            <li v-if="isStudent()" class="nav-item">
               <NuxtLink to="/account/tutors" class="nav-link">Tutors</NuxtLink>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <NuxtLink to="/notifications" class="nav-link">Notifications</NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink to="/settings" class="nav-link">Settings</NuxtLink>
+              <NuxtLink to="/notifications" :class="['nav-link', unseenNotifications > 0 ? 'labelable' : '']">Notifications</NuxtLink>
             </li>
             <li class="nav-item">
               <a href="#" @click="logout" class="nav-link">Log out</a>
@@ -30,7 +45,7 @@
         </div>
       </nav>
 
-      <nuxt v-if="isActive()" />
+      <nuxt v-if="isActive() || isAdmin()" />
       <div v-else>
         <div v-if="isRejected()">
           <h2 class="text-center mt-5">Your profile was rejected</h2>
@@ -44,8 +59,23 @@
 </template>
 
 <script>
+import {isAdmin, isTutor, isStudent} from '~/utils/auth-helper';
+import notifiableMixin from '~/components/mixins/notifiable';
+
 export default {
   name: 'layout-account',
+
+  mixins: [notifiableMixin],
+
+  fetch() {
+    this.refreshUnseenNotifications();
+  },
+
+  computed: {
+    unseenNotifications() {
+      return this.$store.getters['getField']('unseenNotifications');
+    }
+  },
 
   methods: {
     logout() {
@@ -57,8 +87,33 @@ export default {
     },
 
     isRejected() {
-      return this.$auth.loggenIn && this.$auth.user.status == 2;
+      return this.$auth.loggedIn && this.$auth.user.status == 2;
+    },
+
+    isAdmin() {
+      return this.$auth.loggedIn && isAdmin(this.$auth.user);
+    },
+
+    isTutor() {
+      return this.$auth.loggedIn && isTutor(this.$auth.user);
+    },
+
+    isStudent() {
+      return this.$auth.loggedIn && isStudent(this.$auth.user);
     }
   }
 }
 </script>
+
+<style scoped>
+  .labelable::after {
+    position: absolute;
+    right:1px;
+    top:10px;
+    content: '';
+    background-color:#e62a59;
+    border-radius:50%;
+    width:10px;
+    height:10px;
+  }
+</style>

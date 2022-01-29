@@ -47,13 +47,14 @@
 
 <script>
 import errorHandlerMixin from '~/components/mixins/error-handler';
+import notifiableMixin from '~/components/mixins/notifiable';
 
 export default {
   name: 'page-tutors',
 
   layout: 'account',
 
-  mixins: [errorHandlerMixin],
+  mixins: [errorHandlerMixin, notifiableMixin],
 
   fetch() {
     this.getAllTutors();
@@ -82,7 +83,10 @@ export default {
 
     applyAssignment(tutorId) {
       this.$repository.account.assign(tutorId)
-          .then(this.getMyTutors)
+          .then(r => {
+            this.getMyTutors();
+            this.refreshUnseenNotifications();
+          })
           .catch(this.handleError)
     }
   }

@@ -27,8 +27,7 @@ export default {
           .then(response => this.$repository.authentication.refreshToken(this.$auth.strategy.refreshToken.get()))
           .then(response => {
             this.setRoleChosen(true);
-            console.log(response);
-            console.log(this.$auth.setUserToken(response.access_token, response.refresh_token));
+            this.$auth.setUserToken(response.access_token, response.refresh_token);
             this.$router.push({path: '/account'});
           })
           .catch(error => this.$errorHandler.handle(this, error));
