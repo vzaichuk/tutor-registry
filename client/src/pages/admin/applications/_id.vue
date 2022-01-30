@@ -32,11 +32,15 @@
 
 <script>
 import {ACCOUNT_STATUS} from '~/utils/constants';
+import toasterMixin from '~/components/mixins/toaster';
+import errorHandlerMixin from '~/components/mixins/error-handler';
 
 export default {
   name: 'page-admin-applications-view',
 
   layout: 'account',
+
+  mixins: [toasterMixin, errorHandlerMixin],
 
   fetch() {
     this.getAccount(this.$route.params.id);
@@ -52,13 +56,16 @@ export default {
     getAccount(id) {
       return this.$repository.account.getOne(id)
           .then(response => this.account = response)
-          .catch(error => console.log(error));
+          .catch(this.handleError);
     },
 
     accept(decision) {
       this.$repository.account.accept(this.account.id, !!decision)
-          .then(response => this.account = response)
-          .catch(console.log);
+          .then(response => {
+            this.account = response;
+            this.notifySuccess('Decision has been made');
+          })
+          .catch(this.handleError);
     },
 
     getStatusTitle(status) {

@@ -16,12 +16,13 @@
         <NuxtLink to="/auth/signup" class="text-dark mt-4">Registration</NuxtLink>
       </div>
       
-      <p class="mt-5 mb-3 text-muted">© 2021</p>
+      <p class="mt-5 mb-3 text-muted">© 2021-{{ year }}</p>
     </form>
   </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 import errorHanlderMixin from '~/components/mixins/error-handler';
 
 export default {
@@ -41,13 +42,25 @@ export default {
     };
   },
 
+  computed: {
+    year() {
+      return (new Date()).getFullYear();
+    }
+  },
+
   methods: {
+    ...mapActions(['setRoleChosen']),
+
     login: function() {
       this.$auth
           .loginWith('local', {auth: {username: this.email, password: this.password}})
           .catch(this.handleError)
           .then(() => this.$router.push('/account'));
     }
+  },
+
+  created() {
+    this.setRoleChosen(false);
   }
 }
 </script>

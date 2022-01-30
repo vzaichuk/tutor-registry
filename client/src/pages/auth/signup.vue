@@ -21,7 +21,7 @@
         <NuxtLink to="/auth/login" class="text-dark mt-4">Log in</NuxtLink>
       </div>
       
-      <p class="mt-5 mb-3 text-muted">© 2021</p>
+      <p class="mt-5 mb-3 text-muted">© 2021-{{ year }}</p>
     </form>
   </div>
 </template>
@@ -47,6 +47,12 @@ export default {
         password: ''
       }
     };
+  },
+
+  computed: {
+    year() {
+      return (new Date()).getFullYear();
+    }
   },
 
   methods: {

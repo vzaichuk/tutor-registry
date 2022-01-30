@@ -18,6 +18,7 @@ export default {
       for (let handler of errorHandlers) {
         if (handler.on(error)) {
           handler.process(error, this);
+          return;
         }
       }
     }

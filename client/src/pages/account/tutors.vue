@@ -48,13 +48,14 @@
 <script>
 import errorHandlerMixin from '~/components/mixins/error-handler';
 import notifiableMixin from '~/components/mixins/notifiable';
+import toasterMixin from '~/components/mixins/toaster';
 
 export default {
   name: 'page-tutors',
 
   layout: 'account',
 
-  mixins: [errorHandlerMixin, notifiableMixin],
+  mixins: [errorHandlerMixin, notifiableMixin, toasterMixin],
 
   fetch() {
     this.getAllTutors();
@@ -86,6 +87,7 @@ export default {
           .then(r => {
             this.getMyTutors();
             this.refreshUnseenNotifications();
+            this.notifySuccess('You have been successfully assigned');
           })
           .catch(this.handleError)
     }
