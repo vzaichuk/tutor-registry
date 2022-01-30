@@ -33,7 +33,7 @@ public class RouteConfiguration {
   RouteLocator routeLocator(RouteLocatorBuilder builder) {
     return builder.routes()
         .route("authentication_via_credentials",
-            route -> route.path("/authentication/login/credentials")
+            route -> route.path(ServiceUriProvider.AUTHENTICATION_PATH + "/login/credentials")
                 .and().method(HttpMethod.POST)
                 .filters(filter -> filter.stripPrefix(1)
                     .setPath(OAUTH_URL)
@@ -44,7 +44,7 @@ public class RouteConfiguration {
                 .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("authentication_via_refresh_token",
-            route -> route.path("/authentication/login/refresh")
+            route -> route.path(ServiceUriProvider.AUTHENTICATION_PATH + "/login/refresh")
                 .and().method(HttpMethod.POST)
                 .filters(filter -> filter.stripPrefix(1)
                     .setPath(OAUTH_URL)
@@ -55,23 +55,23 @@ public class RouteConfiguration {
                 .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("authentication_service_requests",
-            route -> route.path("/authentication/**")
+            route -> route.path(ServiceUriProvider.AUTHENTICATION_PATH + "/**")
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(serviceUriProvider.getAuthenticationUri())
         )
         .route("account_get",
             route -> route
-                .path("/account/**")
+                .path(ServiceUriProvider.ACCOUNT_PATH + "/**")
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(serviceUriProvider.getAccountUri()))
         .route("registration",
             route -> route
-                .path("/registration/**")
+                .path(ServiceUriProvider.REGISTRATION_PATH + "/**")
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(serviceUriProvider.getRegistrationUri()))
         .route("notification",
             route -> route
-                .path("/notification/**")
+                .path(ServiceUriProvider.NOTIFICATION_PATH + "/**")
                 .filters(filter -> filter.stripPrefix(1))
                 .uri(serviceUriProvider.getNotificationUri()))
         .route("client_get",

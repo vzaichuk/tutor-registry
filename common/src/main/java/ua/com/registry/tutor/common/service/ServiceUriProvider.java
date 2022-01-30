@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceUriProvider {
 
-  private static final String NOTIFICATION_PATH = "/notification";
+  public static final String AUTHENTICATION_PATH = "/authentication";
+  public static final String ACCOUNT_PATH = "/account";
+  public static final String REGISTRATION_PATH = "/registration";
+  public static final String NOTIFICATION_PATH = "/notification";
 
   @Value("${GATEWAY_HOST}")
   private String gatewayServiceName;
