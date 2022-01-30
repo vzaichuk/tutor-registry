@@ -1,7 +1,10 @@
 package ua.com.registry.tutor.registration.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,13 @@ public class AssignmentService {
     return assignmentRepository.findAllByStudentAccountId(studentId).stream()
         .map(Assignment::getTutorAccountId)
         .findAny().orElse(0);
+  }
+
+  public List<Integer> getAssigneeIds(int tutorId) {
+    Set<Integer> result = assignmentRepository.findByTutorAccountId(tutorId)
+        .map(Assignment::getStudentAccountIds)
+        .orElse(Collections.emptySet());
+    return new ArrayList<>(result);
   }
 
   @Transactional

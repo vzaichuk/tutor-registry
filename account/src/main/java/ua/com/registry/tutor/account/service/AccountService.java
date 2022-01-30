@@ -8,34 +8,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import ua.com.registry.tutor.account.domain.dto.AcceptRequestDto;
 import ua.com.registry.tutor.account.domain.entity.Account;
 import ua.com.registry.tutor.account.domain.enums.AccountStatus;
 import ua.com.registry.tutor.account.domain.repository.AccountRepository;
-import ua.com.registry.tutor.common.domain.dto.AssignmentRequestDto;
 import ua.com.registry.tutor.common.domain.enums.UserRole;
 import ua.com.registry.tutor.common.service.AuthenticationHelper;
-import ua.com.registry.tutor.common.service.ServiceUriProvider;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
-  @LoadBalanced
-  private final RestTemplate restTemplate;
   private final AccountRepository accountRepository;
   private final AuthenticationHelper authenticationHelper;
-  private final ServiceUriProvider serviceUriProvider;
+  private final RegistrationService registrationService;
   private final NotificationService notificationService;
   private final Account EMPTY_ACCOUNT = new Account();
 
@@ -120,14 +111,7 @@ public class AccountService {
       throw new IllegalStateException("Authorization token is absent");
     }
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.AUTHORIZATION, token);
-
-    HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(null, headers);
-
-    Integer tutorId = restTemplate.exchange(serviceUriProvider
-        .getRegistrationAssignedUri(account.getId()), HttpMethod.GET, request, Integer.class)
-        .getBody();
+    Integer tutorId = registrationService.getTutorIdByStudentId(account.getId(), token);
 
     if (tutorId == null || tutorId < 1) {
       return Collections.emptyList();
@@ -135,6 +119,23 @@ public class AccountService {
 
     return accountRepository.findById(tutorId)
         .stream().collect(Collectors.toList());
+  }
+
+  public List<Account> getMyStudents(Authentication authentication, String token) {
+    Account account = getAccountFromAuthentication(authentication, token);
+
+    // Send request.
+    if (!StringUtils.hasText(token)) {
+      throw new IllegalStateException("Authorization token is absent");
+    }
+
+    List<Integer> ids = registrationService.getStudentIdsByTutorId(account.getId(), token);
+
+    if (ids == null || ids.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return accountRepository.findAllById(ids);
   }
 
   public Boolean assignStudentToTutor(
@@ -148,14 +149,7 @@ public class AccountService {
       throw new IllegalStateException("Authorization token is absent");
     }
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.AUTHORIZATION, token);
-
-    HttpEntity<AssignmentRequestDto> request = new HttpEntity<>(
-        new AssignmentRequestDto(tutorAccount.getId(), studentAccount.getId()), headers);
-
-    Boolean succeeded = restTemplate
-        .postForObject(serviceUriProvider.getRegistrationAssignUri(), request, Boolean.class);
+    Boolean succeeded = registrationService.assign(tutorAccount, studentAccount, token);
 
     if (Boolean.TRUE.equals(succeeded)) {
       notificationService.add(

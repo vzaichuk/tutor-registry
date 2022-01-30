@@ -63,6 +63,10 @@ public class ServiceUriProvider {
     return getGatewayUri() + "/registration/assigned/" + id;
   }
 
+  public String getRegistrationAssigneesUri(int id) {
+    return getGatewayUri() + "/registration/assignees/" + id;
+  }
+
   public String getNotificationCreateUrl() {
     return getGatewayUri() + NOTIFICATION_PATH + "/add";
   }
