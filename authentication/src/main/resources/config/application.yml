@@ -11,6 +11,9 @@ spring:
     password: ${AUTHENTICATION_DB_PASS}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    baseline-on-migrate: true
+
 server:
   port: ${AUTHENTICATION_PORT}
 
