@@ -9,6 +9,8 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${ACCOUNT_DB_NAME}
     username: ${ACCOUNT_DB_USER}
     password: ${ACCOUNT_DB_PASS}
+  flyway:
+    baseline-on-migrate: true
 
 server:
   port: ${ACCOUNT_PORT}

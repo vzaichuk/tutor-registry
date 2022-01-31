@@ -30,6 +30,7 @@ dependencies {
     implementation 'com.sun.xml.bind:jaxb-impl:2.3.2'
     implementation 'mysql:mysql-connector-java:8.0.27'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.flywaydb:flyway-mysql:8.4.3'
     implementation project(':common')
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
