@@ -1,0 +1,25 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+group 'ua.com.registry.tutor'
+version '1.0'
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.mongodb:mongo-java-driver:3.12.10'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ua.com.registry.tutor.starter.Application'
+    }
+}
+
+build.finalizedBy(shadowJar.archiveFile)

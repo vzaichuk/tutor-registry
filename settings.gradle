@@ -8,4 +8,5 @@ include 'notification'
 include 'registration'
 include 'client'
 include 'common'
+include 'starter'
 

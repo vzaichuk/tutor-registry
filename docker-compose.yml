@@ -63,6 +63,15 @@ services:
       - bus
     env_file: .env
 
+  starter-service:
+      build: starter
+      image: starter-image
+      networks:
+        - bus
+      env_file: .env
+      depends_on:
+        - ${MONGO_HOST}
+
   mysql-service:
     image: mysql:8.0
     command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -81,8 +90,8 @@ services:
   mongo-service:
     image: mongo:5.0.5
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
     networks:
       - bus
     ports:
@@ -92,4 +101,3 @@ services:
 
 networks:
   bus:
-#    driver: bridge
