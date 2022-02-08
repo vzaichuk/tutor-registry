@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum GrantType {
 
   PASSWORD("password"),
-  REFRESH_TOKEN("refresh_token");
+  REFRESH_TOKEN("refresh_token"),
+  AUTHORIZATION_CODE("authorization_code");
 
   private final String value;
 

@@ -1,9 +1,9 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version "${shadowPluginVersion}"
     id 'java'
 }
 
-group 'ua.com.registry.tutor'
+group "${groupName}"
 version '1.0'
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -13,8 +13,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.mongodb:mongo-java-driver:3.12.10'
-    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation "org.mongodb:mongo-java-driver:${mongoDriverVersion}"
+    implementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
 }
 
 jar {

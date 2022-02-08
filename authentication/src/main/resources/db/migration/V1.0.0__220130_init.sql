@@ -1,12 +1,12 @@
 -- Auth client
 DROP TABLE IF EXISTS `auth_client`;
 CREATE TABLE IF NOT EXISTS `auth_client` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `client` VARCHAR(64) NOT NULL,
   `secret` VARCHAR(64) NOT NULL,
   `grant_types` VARCHAR(64) NOT NULL DEFAULT "",
-  `access_token_duration` INT(11) UNSIGNED NOT NULL,
-  `refresh_token_duration` INT(11) UNSIGNED NOT NULL,
+  `access_token_duration` INT UNSIGNED NOT NULL,
+  `refresh_token_duration` INT UNSIGNED NOT NULL,
   `is_enabled` BOOLEAN NOT NULL,
   PRIMARY KEY(`id`),
   CONSTRAINT `auth_client_unique_client` UNIQUE (`client`)

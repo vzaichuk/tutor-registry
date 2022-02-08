@@ -32,12 +32,7 @@ public class UserService {
     userRepository.findByUsername(dto.getEmail())
         .ifPresent(u -> { throw new IllegalStateException("User already exists"); });
 
-    User user = new User();
-    user.setUsername(dto.getEmail().trim().toLowerCase());
-    user.setPassword(passwordEncoder.encode(dto.getPassword()));
-    user.setEnabled(true);
-
-    return userRepository.save(user);
+    return createUser(dto.getEmail(), passwordEncoder.encode(dto.getPassword()));
   }
 
   @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -61,5 +56,14 @@ public class UserService {
 
   public Optional<User> findByUserName(String username) {
     return userRepository.findByUsername(Objects.requireNonNull(username).trim().toLowerCase());
+  }
+
+  public User createUser(String email, String password) {
+    User user = new User();
+    user.setUsername(email.trim().toLowerCase());
+    user.setPassword(password);
+    user.setEnabled(true);
+
+    return userRepository.save(user);
   }
 }

@@ -65,6 +65,8 @@ services:
     env_file: .env
     networks:
       - bus
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
 
   starter-service:
     build: starter

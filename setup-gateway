@@ -1,0 +1,45 @@
+export ACCOUNT_HOST=localhost:8082;
+export ACCOUNT_PORT=8082;
+export ACCOUNT_DB_NAME=account;
+export ACCOUNT_DB_USER=account;
+export ACCOUNT_DB_PASS=password;
+export AUTHENTICATION_HOST=localhost:8081;
+export AUTHENTICATION_PORT=8081;
+export DISCOVERY_HOST=localhost;
+export DISCOVERY_PORT=8761;
+export GATEWAY_HOST=localhost;
+export GATEWAY_PORT=8080;
+export GATEWAY_CLIENT_SECRET="Basic Z2F0ZXdheTpzZWNyZXQ=";
+export MYSQL_HOST=localhost;
+export MYSQL_PORT=3306;
+export MYSQL_ROOT_PASS=password
+export AUTHENTICATION_DB_NAME=authentication;
+export AUTHENTICATION_DB_USER=authentication;
+export AUTHENTICATION_DB_PASS=password;
+export SERVICE_SCHEME=http
+export CLIENT_HOST=localhost
+export CLIENT_PORT=80
+export REGISTRATION_HOST=localhost:8083
+export REGISTRATION_PORT=8083
+export REGISTRATION_DB_NAME=registration
+export REGISTRATION_DB_USER=registration
+export REGISTRATION_DB_PASS=password
+export NOTIFICATION_HOST=localhost:8084
+export NOTIFICATION_PORT=8084
+export NOTIFICATION_DB_NAME=notification
+export NOTIFICATION_DB_USER=notification
+export NOTIFICATION_DB_PASS=password
+export MONGO_HOST=localhost
+export MONGO_PORT=27017
+export MONGO_ROOT_USER=root
+export MONGO_ROOT_PASS=password
+export GOOGLE_CLIENT_ID="870853253793-fh56mal3r7fuep5ebhsnik4bol8lr9i0.apps.googleusercontent.com"
+export GOOGLE_CLIENT_SECRET="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"
+
+alias run-discovery='bind-java-11 && ./gradlew :discovery:bootRun'
+alias run-gateway='bind-java-11 && export SERVICE_SCHEME=http && export AUTHENTICATION_HOST="localhost:${AUTHENTICATION_PORT}" && export REGISTRATION_HOST="localhost:${REGISTRATION_PORT}" && export ACCOUNT_HOST="localhost:${ACCOUNT_PORT}" && NOTIFICATION_HOST="localhost:${NOTIFICATION_PORT}" && ./gradlew :gateway:bootRun'
+alias run-authentication='bind-java-11 && ./gradlew :authentication:bootRun'
+alias run-account='bind-java-11 && export GATEWAY_HOST="localhost:${GATEWAY_PORT}" && ./gradlew :account:bootRun'
+alias run-registration='bind-java-11 && ./gradlew :registration:bootRun'
+alias run-notification='bind-java-11 && ./gradlew :notification:bootRun'
+

@@ -3,19 +3,7 @@
     <form class="form-signin">
       <img class="mb-4 invert" src="/img/hero-logo.png" alt="" width="72" height="72" />
 
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input v-model="email" type="email" class="form-control" placeholder="Email address" @keypress.enter="login" required="" autofocus="" />
-      
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input v-model="password" type="password" class="form-control" placeholder="Password" @keypress.enter="login" required="" />
-
-      <button @click="login" type="button" class="btn btn-lg btn-primary btn-block">Log in</button>
-      <button v-if="googleOauth2Url" @click="redirectTo(googleOauth2Url)" type="button" class="btn btn-lg btn-primary btn-block">Log in with Google</button>
-      <div class="mt-2 text-left">
-        <NuxtLink to="/auth/signup" class="text-dark mt-4">Registration</NuxtLink>
-      </div>
+      <p>Just a sec...</p>
       
       <p class="mt-5 mb-3 text-muted">© 2021-{{ year }}</p>
     </form>
@@ -36,15 +24,11 @@ export default {
   mixins: [errorHanlderMixin],
 
   fetch() {
-    this.fetchOauth2Urls();
+    this.authenticate();
   },
 
   data: function() {
     return {
-      email: '',
-      password: '',
-      error: '',
-      googleOauth2Url: null
     };
   },
 
@@ -57,21 +41,15 @@ export default {
   methods: {
     ...mapActions(['setRoleChosen']),
 
-    login: function() {
-      this.$auth
-          .loginWith('local', {auth: {username: this.email, password: this.password}})
-          .catch(this.handleError)
-          .then(() => this.$router.push('/account'));
-    },
-
-    fetchOauth2Urls() {
-      this.$repository.authentication.getOauth2Url('google')
-          .then(response => this.googleOauth2Url = response)
-          .catch(this.handleError);
-    },
-
-    redirectTo(url) {
-      window.location.href = url;
+    authenticate() {
+      this.$repository.authentication
+          .authenticateOauth2(this.$route.params.id, this.$route.query.code)
+          .then(response => {
+            console.log(response);
+            this.$auth.setUserToken(response.access_token, response.refresh_token);
+            this.$router.push({path: '/account'});
+          })
+          .catch(error => this.$errorHandler.handle(this, error));
     }
   },
 

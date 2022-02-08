@@ -1,18 +1,14 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'java'
     id 'war'
 }
 
-group 'ua.com.registry.tutor'
+group "${groupName}"
 version '1.0'
 
 sourceCompatibility = JavaVersion.VERSION_11
-
-ext {
-    set('springCloudVersion', "2021.0.0")
-}
 
 repositories {
     mavenCentral()

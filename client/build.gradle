@@ -1,9 +1,6 @@
 plugins {
-    id "org.siouan.frontend-jdk11" version "6.0.0"
+    id "org.siouan.frontend-jdk11" version "${siouanFrontendJdk11Version}"
 }
-
-group 'ua.com.registry.tutor'
-version '1.0'
 
 frontend {
     nodeVersion = '14.17.3'
