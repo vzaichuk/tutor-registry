@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation "org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauth2Version}"
     implementation "org.springframework.security:spring-security-jwt:${springSecurityJwtVersion}"
@@ -28,8 +27,8 @@ dependencies {
     implementation "com.sun.xml.bind:jaxb-impl:${xmlBindVersion}"
     implementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
     implementation "org.flywaydb:flyway-mysql:${flywayMysqlVersion}"
-    implementation 'com.google.api-client:google-api-client:1.33.0'
-    implementation 'com.google.apis:google-api-services-oauth2:v2-rev157-1.25.0'
+    implementation "com.google.api-client:google-api-client:${googleApiClientVersion}"
+    implementation "com.google.apis:google-api-services-oauth2:${googleApiServicesVersion}"
     implementation project(':common')
 
     annotationProcessor "org.projectlombok:lombok:${projectlombokVersion}"
